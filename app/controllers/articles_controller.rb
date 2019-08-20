@@ -2,13 +2,16 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.all
   end
-  
+
   def create
-    @article = Article.new(params[:article].permit(:title, :text))
+    @article = Article.new(article_params)
 
     ## Returns a bool indicating if article was saved or not
-    @article.save 
-    redirect_to @article
+    if @article.save 
+      redirect_to @article
+    else
+      render 'new'
+    end
   end
 
   def show
@@ -17,4 +20,10 @@ class ArticlesController < ApplicationController
 
   def new
   end
+
+  private
+    def article_params
+      params.require(:article).permit(:title, :text)
+    end
+
 end
